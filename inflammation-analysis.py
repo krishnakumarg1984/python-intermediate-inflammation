@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Software for managing and analysing patients' inflammation data in our imaginary hospital."""
-
 import argparse
 
-from inflammation import models, views
+from inflammation import models
+from inflammation import views
 
 
 def main(args):
@@ -13,26 +13,32 @@ def main(args):
     - selecting the necessary models and views for the current task
     - passing data between models and views
     """
-    InFiles = args.infiles
-    if not isinstance(InFiles, list):
-        InFiles = [args.infiles]
+    inFiles = args.infiles
+    if not isinstance(inFiles, list):
+        inFiles = [args.infiles]
 
-
-    for filename in InFiles:
+    for filename in inFiles:
         inflammation_data = models.load_csv(filename)
 
-        view_data = {'average': models.daily_mean(inflammation_data), 'max': models.daily_max(inflammation_data), 'min': models.daily_min(inflammation_data)}
+        view_data = {
+            "average": models.daily_mean(inflammation_data),
+            "max": models.daily_max(inflammation_data),
+            "min": models.daily_min(inflammation_data),
+        }
 
         views.visualize(view_data)
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='A basic patient inflammation data management system')
+        description="A basic patient inflammation data management system"
+    )
 
     parser.add_argument(
-        'infiles',
-        nargs='+',
-        help='Input CSV(s) containing inflammation series for each patient')
+        "infiles",
+        nargs="+",
+        help="Input CSV(s) containing inflammation series for each patient",
+    )
 
     args = parser.parse_args()
 
